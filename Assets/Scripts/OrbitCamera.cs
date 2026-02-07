@@ -41,6 +41,7 @@ public class OrbitCamera : MonoBehaviour
     private float _distance;
     private float _elevationAngle;   // degrees above (+) or below (−) the horizontal plane
     private float _startAngle;       // initial heading around the Y axis (degrees)
+    private float _pitchOffset;      // difference between the authored X rotation and what LookAt computes
 
     // Sweep state — driven by a sine wave for smooth easing at each end.
     private float _phase;
@@ -51,6 +52,11 @@ public class OrbitCamera : MonoBehaviour
     private float _dragAngleOffset;    // cumulative heading offset from user drag (degrees)
     private float _resumeTimer;        // counts down to zero after release
     private float _angularVelocity;    // current momentum in degrees/sec
+
+    private void Awake()
+    {
+        Application.targetFrameRate = 300;
+    }
 
     private void Start()
     {
@@ -69,6 +75,13 @@ public class OrbitCamera : MonoBehaviour
         float horizontalDistance = new Vector2(offset.x, offset.z).magnitude;
         _elevationAngle = Mathf.Atan2(offset.y, horizontalDistance) * Mathf.Rad2Deg;
         _startAngle = Mathf.Atan2(offset.x, offset.z) * Mathf.Rad2Deg;
+
+        // Capture the pitch the user set in the Inspector, then compare it to
+        // what LookAt would produce so we can preserve the difference every frame.
+        float authoredPitch = transform.eulerAngles.x;
+        transform.LookAt(target);
+        float lookAtPitch = transform.eulerAngles.x;
+        _pitchOffset = Mathf.DeltaAngle(lookAtPitch, authoredPitch);
 
         _phase = 0f;
         _dragAngleOffset = 0f;
@@ -134,6 +147,12 @@ public class OrbitCamera : MonoBehaviour
         if (lookAtTarget)
         {
             transform.LookAt(target);
+
+            // Restore the user-authored pitch offset so the camera doesn't
+            // snap to the exact geometric angle toward the target pivot.
+            Vector3 euler = transform.eulerAngles;
+            euler.x += _pitchOffset;
+            transform.eulerAngles = euler;
         }
     }
 

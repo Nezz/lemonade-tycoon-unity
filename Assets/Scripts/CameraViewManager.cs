@@ -6,19 +6,19 @@ using Yousician.Expo.Messages.Inbound;
 namespace Yousician
 {
 	/// <summary>
-	/// Toggles between two cameras based on the CameraViewChanged message
-	/// received from the native app. Assign both cameras in the Inspector;
-	/// the day camera is active by default.
+	/// Toggles between two sets of GameObjects based on the CameraViewChanged message
+	/// received from the native app. Assign GameObjects for each view in the Inspector;
+	/// the day objects are active by default.
 	/// </summary>
 	public sealed class CameraViewManager : MonoBehaviour
 	{
 		[SerializeField]
-		[Tooltip("The camera used for the day view.")]
-		private Camera dayCamera;
+		[Tooltip("GameObjects active during the day view (cameras, lights, etc.).")]
+		private GameObject[] dayObjects;
 
 		[SerializeField]
-		[Tooltip("The camera used for the simulation view.")]
-		private Camera simulationCamera;
+		[Tooltip("GameObjects active during the simulation view (cameras, lights, etc.).")]
+		private GameObject[] simulationObjects;
 
 		private void OnEnable()
 		{
@@ -40,11 +40,19 @@ namespace Yousician
 
 		private void SetView(CameraView view)
 		{
-			if (dayCamera != null)
-				dayCamera.gameObject.SetActive(view == CameraView.Day);
+			SetObjectsActive(dayObjects, view == CameraView.Day);
+			SetObjectsActive(simulationObjects, view == CameraView.Simulation);
+		}
 
-			if (simulationCamera != null)
-				simulationCamera.gameObject.SetActive(view == CameraView.Simulation);
+		private static void SetObjectsActive(GameObject[] objects, bool active)
+		{
+			if (objects == null) return;
+
+			for (int i = 0; i < objects.Length; i++)
+			{
+				if (objects[i] != null)
+					objects[i].SetActive(active);
+			}
 		}
 	}
 }

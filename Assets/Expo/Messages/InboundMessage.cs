@@ -19,6 +19,10 @@ namespace Yousician.Expo.Messages
 			[EnumMember(Value = "UpgradesChanged")]
 			[JsonTypeDiscriminator(typeof(UpgradesChanged))]
 			UpgradesChanged,
+
+			[EnumMember(Value = "CameraViewChanged")]
+			[JsonTypeDiscriminator(typeof(CameraViewChanged))]
+			CameraViewChanged,
 		}
 	}
 }

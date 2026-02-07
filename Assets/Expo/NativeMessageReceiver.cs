@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Scripting;
+using Yousician.Expo.Messages.Outbound;
 
 namespace Yousician.Expo
 {
@@ -11,13 +12,16 @@ namespace Yousician.Expo
 	{
 		private void Start()
 		{
-			NativeMessageChannel.Send("initialized");
+			NativeMessageChannel.Send(new Initialized());
 		}
 
+		/// <summary>
+		/// Called by the native app via UnitySendMessage with a JSON string payload.
+		/// </summary>
 		[Preserve]
-		public void Receive(string message)
+		public void Receive(string json)
 		{
-			NativeMessageChannel.OnMessageReceived(message);
+			NativeMessageChannel.OnMessageReceived(json);
 		}
 	}
 }

@@ -6581,6 +6581,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 323962860}
+  - component: {fileID: 323962861}
   m_Layer: 0
   m_Name: Lemonade
   m_TagString: Untagged
@@ -6611,6 +6612,25 @@ Transform:
   - {fileID: 1552098400}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &323962861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 323962859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cdfc774217fd48749837840b5e1a49d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  upgrades:
+  - upgradeId: 0
+    target: {fileID: 611437259}
+  - upgradeId: 1
+    target: {fileID: 937502636}
+  - upgradeId: 2
+    target: {fileID: 1442438358}
 --- !u!1001 &332698361
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11994,6 +12014,11 @@ PrefabInstance:
 --- !u!4 &611437258 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 46353a7f419a14ef6beb1e7ed305c366, type: 3}
+  m_PrefabInstance: {fileID: 611437257}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &611437259 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 46353a7f419a14ef6beb1e7ed305c366, type: 3}
   m_PrefabInstance: {fileID: 611437257}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &617558454
@@ -18686,6 +18711,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5fb3821106a154a59a9b9c58e1fe20a7, type: 3}
   m_PrefabInstance: {fileID: 937502634}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &937502636 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 5fb3821106a154a59a9b9c58e1fe20a7, type: 3}
+  m_PrefabInstance: {fileID: 937502634}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &937526884
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21074,6 +21104,50 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
+--- !u!1 &1065335128
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1065335130}
+  - component: {fileID: 1065335129}
+  m_Layer: 0
+  m_Name: NativeMessageReceiver
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1065335129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1065335128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80324c1446b0f417385796a4d4f2ac22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1065335130
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1065335128}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 7, z: 3.6000001}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1072157761
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28004,6 +28078,11 @@ PrefabInstance:
 --- !u!4 &1442438357 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: f8fd1104337634034804439e60f8145d, type: 3}
+  m_PrefabInstance: {fileID: 1442438356}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1442438358 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: f8fd1104337634034804439e60f8145d, type: 3}
   m_PrefabInstance: {fileID: 1442438356}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1444430871
@@ -42849,3 +42928,4 @@ SceneRoots:
   - {fileID: 1327435097}
   - {fileID: 1623080799}
   - {fileID: 323962860}
+  - {fileID: 1065335130}

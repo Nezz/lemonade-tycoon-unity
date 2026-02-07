@@ -1,5 +1,7 @@
 using System;
+using Newtonsoft.Json;
 using UnityEngine;
+using Yousician.Expo.Messages;
 
 namespace Yousician.Expo
 {
@@ -10,19 +12,25 @@ namespace Yousician.Expo
 	/// </summary>
 	public static class NativeMessageChannel
 	{
-		/// <summary>
-		/// Raised when a message is received from the native mobile app.
-		/// </summary>
-		public static event Action<string> MessageReceived;
+		private static readonly JsonSerializerSettings SerializerSettings = new JsonSerializerSettings
+		{
+			NullValueHandling = NullValueHandling.Ignore,
+		};
 
 		/// <summary>
-		/// Sends a string message to the native mobile app.
+		/// Raised when a typed message is received from the native mobile app.
 		/// </summary>
-		public static void Send(string message)
+		public static event Action<InboundMessage> MessageReceived;
+
+		/// <summary>
+		/// Sends a typed message to the native mobile app, serialized as JSON.
+		/// </summary>
+		public static void Send(OutboundMessage message)
 		{
 			try
 			{
-				NativeMessageSender.SendMessageToMobileApp(message);
+				var json = JsonConvert.SerializeObject(message, SerializerSettings);
+				NativeMessageSender.SendMessageToMobileApp(json);
 			}
 			catch (Exception e)
 			{
@@ -31,20 +39,37 @@ namespace Yousician.Expo
 		}
 
 		/// <summary>
-		/// Called internally when an inbound message arrives from native.
+		/// Called internally when a raw JSON string arrives from native.
+		/// Deserializes it into an <see cref="InboundMessage"/> and raises the event.
 		/// </summary>
-		internal static void OnMessageReceived(string message)
+		internal static void OnMessageReceived(string json)
 		{
-			MessageReceived?.Invoke(message);
+			try
+			{
+				var message = JsonConvert.DeserializeObject<InboundMessage>(json, SerializerSettings);
+				MessageReceived?.Invoke(message);
+			}
+			catch (Exception e)
+			{
+				Debug.LogError($"Failed to deserialize inbound native message: {e}\nRaw JSON: {json}");
+			}
 		}
 
 #if UNITY_EDITOR
 		/// <summary>
 		/// Triggers a fake inbound message for editor testing.
 		/// </summary>
-		public static void TriggerFakeMessage(string message)
+		public static void TriggerFakeMessage(InboundMessage message)
 		{
-			OnMessageReceived(message);
+			MessageReceived?.Invoke(message);
+		}
+
+		/// <summary>
+		/// Triggers a fake inbound message from a raw JSON string for editor testing.
+		/// </summary>
+		public static void TriggerFakeMessage(string json)
+		{
+			OnMessageReceived(json);
 		}
 #endif
 	}

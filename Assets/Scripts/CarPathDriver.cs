@@ -29,7 +29,7 @@ public class CarPathDriver : MonoBehaviour
     private int _direction = 1;
     private bool _pathFinished;
 
-    private void Start()
+    private void OnEnable()
     {
         if (path == null || path.WaypointCount < 2)
         {

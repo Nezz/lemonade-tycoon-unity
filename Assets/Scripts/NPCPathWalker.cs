@@ -36,7 +36,7 @@ public class NPCPathWalker : MonoBehaviour
     private bool _isPaused;
     private Animator _animator;
 
-    private void Start()
+    private void OnEnable()
     {
         if (path == null || path.WaypointCount < 2)
         {
@@ -151,23 +151,14 @@ public class NPCPathWalker : MonoBehaviour
 
     private void StartWalkAnimation()
     {
-        if (_isWalking) return;
-        _isWalking = true;
-
-        if (_animator != null)
-        {
-            _animator.CrossFadeInFixedTime("walk", crossfadeDuration);
-        }
+        _animator.CrossFadeInFixedTime("walk", crossfadeDuration);
     }
 
     private void StopWalkAnimation()
     {
         if (!_isWalking) return;
         _isWalking = false;
-
-        if (_animator != null)
-        {
-            _animator.CrossFadeInFixedTime("idle", crossfadeDuration);
-        }
+        
+        _animator.CrossFadeInFixedTime("idle", crossfadeDuration);
     }
 }

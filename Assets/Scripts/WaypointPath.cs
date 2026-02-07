@@ -35,9 +35,11 @@ public class WaypointPath : MonoBehaviour
     /// </summary>
     /// <param name="currentIndex">The current waypoint index.</param>
     /// <param name="direction">1 for forward, -1 for backward. Updated if ping-pong reverses.</param>
+    /// <param name="shouldTeleport">True if the entity should teleport to the next waypoint (loop without ping-pong).</param>
     /// <returns>The next waypoint index, or -1 if the path has ended (non-looping).</returns>
-    public int GetNextIndex(int currentIndex, ref int direction)
+    public int GetNextIndex(int currentIndex, ref int direction, out bool shouldTeleport)
     {
+        shouldTeleport = false;
         int count = WaypointCount;
         if (count < 2) return -1;
 
@@ -55,6 +57,7 @@ public class WaypointPath : MonoBehaviour
                 else
                 {
                     next = 0;
+                    shouldTeleport = true;
                 }
             }
             else
@@ -68,6 +71,11 @@ public class WaypointPath : MonoBehaviour
             {
                 direction = 1;
                 next = currentIndex + direction;
+            }
+            else if (loop)
+            {
+                next = count - 1;
+                shouldTeleport = true;
             }
             else
             {

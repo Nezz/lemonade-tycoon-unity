@@ -60,7 +60,7 @@ public class NPCPathWalker : MonoBehaviour
         transform.position = path.GetWaypointPosition(_currentWaypointIndex);
 
         // Advance to the next waypoint so we have somewhere to walk to
-        int nextIndex = path.GetNextIndex(_currentWaypointIndex, ref _direction);
+        int nextIndex = path.GetNextIndex(_currentWaypointIndex, ref _direction, out _);
         if (nextIndex >= 0)
         {
             _currentWaypointIndex = nextIndex;
@@ -100,7 +100,7 @@ public class NPCPathWalker : MonoBehaviour
     private void OnWaypointReached()
     {
         int prevDirection = _direction;
-        int nextIndex = path.GetNextIndex(_currentWaypointIndex, ref _direction);
+        int nextIndex = path.GetNextIndex(_currentWaypointIndex, ref _direction, out bool shouldTeleport);
 
         if (nextIndex < 0)
         {
@@ -110,19 +110,32 @@ public class NPCPathWalker : MonoBehaviour
             return;
         }
 
-        // Detect if the direction reversed (hit an end of a ping-pong/loop path)
-        bool reversed = _direction != prevDirection;
-
-        // Also detect if we looped back to the start (non-ping-pong loop)
-        bool loopedToStart = !path.pingPong && path.loop && nextIndex == 0 && prevDirection == 1;
-        bool loopedToEnd = !path.pingPong && path.loop && nextIndex == path.WaypointCount - 1 && prevDirection == -1;
-
         _currentWaypointIndex = nextIndex;
 
-        if (reversed || loopedToStart || loopedToEnd)
+        if (shouldTeleport)
         {
+            // Non-ping-pong loop: teleport back to start and pause
+            StartCoroutine(TeleportAndPause());
+        }
+        else if (_direction != prevDirection)
+        {
+            // Ping-pong: reversed direction, pause before turning around
             StartCoroutine(PauseAtEndpoint());
         }
+    }
+
+    private IEnumerator TeleportAndPause()
+    {
+        _isPaused = true;
+        StopWalkAnimation();
+
+        yield return new WaitForSeconds(pauseDuration);
+
+        // Teleport to the new waypoint position
+        transform.position = path.GetWaypointPosition(_currentWaypointIndex);
+
+        StartWalkAnimation();
+        _isPaused = false;
     }
 
     private IEnumerator PauseAtEndpoint()

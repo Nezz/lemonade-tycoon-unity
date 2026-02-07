@@ -50,7 +50,7 @@ public class CarPathDriver : MonoBehaviour
         // Snap to the starting waypoint and face the next one
         transform.position = path.GetWaypointPosition(_currentWaypointIndex);
 
-        int nextIndex = path.GetNextIndex(_currentWaypointIndex, ref _direction);
+        int nextIndex = path.GetNextIndex(_currentWaypointIndex, ref _direction, out _);
         if (nextIndex >= 0)
         {
             // Face the next waypoint immediately at start
@@ -97,7 +97,7 @@ public class CarPathDriver : MonoBehaviour
 
     private void OnWaypointReached()
     {
-        int nextIndex = path.GetNextIndex(_currentWaypointIndex, ref _direction);
+        int nextIndex = path.GetNextIndex(_currentWaypointIndex, ref _direction, out bool shouldTeleport);
 
         if (nextIndex < 0)
         {
@@ -106,5 +106,24 @@ public class CarPathDriver : MonoBehaviour
         }
 
         _currentWaypointIndex = nextIndex;
+
+        if (shouldTeleport)
+        {
+            // Non-ping-pong loop: teleport back to start
+            transform.position = path.GetWaypointPosition(_currentWaypointIndex);
+
+            // Face the next waypoint after teleporting
+            int peekDir = _direction;
+            int peekNext = path.GetNextIndex(_currentWaypointIndex, ref peekDir, out _);
+            if (peekNext >= 0)
+            {
+                Vector3 toNext = path.GetWaypointPosition(peekNext) - transform.position;
+                toNext.y = 0f;
+                if (toNext != Vector3.zero)
+                {
+                    transform.rotation = Quaternion.LookRotation(toNext) * ModelOffset;
+                }
+            }
+        }
     }
 }

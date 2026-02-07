@@ -42473,6 +42473,10 @@ MonoBehaviour:
   orbitSpeed: 10
   sweepAngle: 90
   lookAtTarget: 1
+  dragSensitivity: 0.1
+  resumeDelay: 2
+  momentumDecay: 1
+  momentumCutoff: 0.5
 --- !u!1001 &7187310710326379297
 PrefabInstance:
   m_ObjectHideFlags: 0
